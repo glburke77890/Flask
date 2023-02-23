@@ -1,26 +1,20 @@
 pipeline {
     agent any
 
-    environment{
-        DOCKER = credentials('Docker')
-    }
-
     stages {
         stage('Build') {
             steps {
                 sh 'docker build -t glburke77890/flaskapp .'
             }
         }
-        stage('Login'){
+        stage('Login and Push'){
             steps{
-                echo '$DOCKER | docker login -u glburke77890 --password-stdin'
+                script{
+                    withDockerRegistry(credentialsId; 'Docker'){
+                        docker push glburke77890/flaskapp
+                    }
+                }
             }
-        }
-        stage('Push'){
-            steps{
-                sh 'docker push glburke77890/flask'
-            }
-
         }
     }
 }
