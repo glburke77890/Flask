@@ -32,5 +32,17 @@ pipeline {
                 }
             }
         }
+        stage('create namespace'){
+            steps{
+                script{
+                    try{
+                        sh 'kubectl apply -f manifest.yaml'
+                    } catch (Exception e){
+                        echo 'Exception occured: ' + e.toString()
+                        echo 'Handled the Exception!'
+                    }
+                }
+            }
+        }
     }
 }
