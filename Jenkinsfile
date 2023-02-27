@@ -1,20 +1,23 @@
 pipeline {
     agent any
 
+    
     stages {
-        stage('Login and Push'){
-            steps{
+        stage('Login, Build and Push'){
+            steps {
                 script{
-                    withDockerRegistry(credentialsId: 'Docker'){
+                    //sign into docker, build image, and push image to dockerhub
+                    withDockerRegistry(credentialsId: 'Docker') {
                         docker.build('glburke77890/flaskapp').push('latest')
                     }
                 }
             }
         }
         stage('AWS Commands'){
-            steps{
-                script{
-                    withAWS(credentials: 'AWS', region: 'us-east-1'){
+            steps {
+                script {
+                    // sign into AWS
+                    withAWS(credentials: 'AWS', region: 'us-east-1'){ 
                         sh 'aws sts get-caller-identity'
                     }
                 }
